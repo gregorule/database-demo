@@ -1,6 +1,7 @@
 package com.qa.jdbcDemo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -73,6 +74,74 @@ public class Cafe {
 			}
 			
 		}
+		
+		//get by query
+		public ArrayList<Drink> getByQuery(String condition, String con) {
+			
+			ArrayList<Drink> resultList = new ArrayList<>();
+			try {
+				conn = db.connect();
+				stmt = conn.createStatement();
+				String query = "SELECT * FROM drinks WHERE " + condition + " = " + con;
+				ResultSet results = stmt.executeQuery(query);
+				
+				//while there is another row below this keep going
+				while(results.next()) {
+					resultList.add(modelDrink(results));
+				}
+				return resultList;
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		
+		
+		//Prepared statements:
+		//- We create a statement Object which contains a query, then we run the statement
+		//- Pass in ? in place of data in our queries 
+		//WHERE size = ? (change ? to be any value)
+		
+		public int deleteDrinkById(int id) {
+			
+			try {
+				conn = db.connect();
+				String query = "DELETE FROM drinks WHERE id = ?";
+				PreparedStatement preStmt = conn.prepareStatement(query);
+				//set the value of ?, you can have as many ? as you want, they index from 1
+				preStmt.setInt(1, id);//the first ? = id
+				return preStmt.executeUpdate();
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+		}
+		
+		//drink - what we're updating with
+		//id 	- what drink we're updating
+		public Drink updateDrinkById(Drink drink, int id) {
+			
+			try {
+				conn = db.connect();
+				String query = "UPDATE drinks SET type = ?, size = ?, dairyFree = ?, cost = ? WHERE id = ?";
+				PreparedStatement preStmt = conn.prepareStatement(query);
+				preStmt.setString(1, drink.getType());//return the type of our drink
+				preStmt.setString(2, drink.getSize());
+				preStmt.setBoolean(3, drink.isDairyFree());
+				preStmt.setFloat(4, drink.getCost());
+				preStmt.setInt(5, id);	//if you're getting data it's a query
+				preStmt.executeUpdate();//otherwise its an update(create, update, delete)
+				return getDrinkById(id);//getting the drink we have just updated
+			}catch(Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		
 		//will return a Drink from a drink resultSet
 		public Drink modelDrink(ResultSet result) {
 			try {
