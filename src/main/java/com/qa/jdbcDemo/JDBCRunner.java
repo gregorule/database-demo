@@ -16,11 +16,11 @@ public class JDBCRunner {
 				Drink drink4 = new Drink("Americano", "grande", true, 3.45f);
 				Drink drink5 = new Drink("Earl Grey Tea", "Medium", true, 1.24f);
 				
-				newCafe.addDrink(latte);
-				newCafe.addDrink(drink2);
-				newCafe.addDrink(drink3);
-				newCafe.addDrink(drink4);
-				newCafe.addDrink(drink5);
+				
+				System.out.println(newCafe.getDrinkById(1));
+				System.out.println(newCafe.getDrinkById(2));
+				System.out.println(newCafe.getAllDrinks());
+				
 	}
 
 }
