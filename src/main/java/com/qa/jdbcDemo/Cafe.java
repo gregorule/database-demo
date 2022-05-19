@@ -98,6 +98,28 @@ public class Cafe {
 			
 		}
 		
+		public ArrayList<Drink> updateByQuery(String first, String sec){
+			
+			ArrayList<Drink> resultList = new ArrayList<>();
+			
+			try {
+				conn = db.connect();
+				stmt = conn.createStatement();
+				String query = "UPDATE drinks SET type = ?, size = ?, dairyFree = ?, cost = ? WHERE ? = ?";
+				PreparedStatement preStmt = conn.prepareStatement(query);
+				preStmt.setString(5, first);
+				ResultSet results = stmt.executeQuery(query);
+				
+				while(results.next()) {
+					resultList.add(modelDrink(results));
+				}
+				return resultList;
+			}catch(Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
 		
 		//Prepared statements:
 		//- We create a statement Object which contains a query, then we run the statement
