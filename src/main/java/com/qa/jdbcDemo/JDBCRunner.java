@@ -21,6 +21,9 @@ public class JDBCRunner {
 				System.out.println(newCafe.getDrinkById(2));
 				System.out.println(newCafe.getAllDrinks());
 				System.out.println(newCafe.getByQuery("size", "'grande'"));
+				System.out.println("************************");
+				System.out.println(newCafe.updateDrinkById(drink5, 5));
+				newCafe.getDrinkById(2);
 				
 	}
 
